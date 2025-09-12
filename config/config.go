@@ -1,6 +1,10 @@
 package config
 
-import "os"
+import (
+	"os"
+
+	"github.com/naoina/toml"
+)
 
 // 서버 기본 설정
 // 환경마다 다른 config, db 사용을 위해 분리
