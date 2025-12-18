@@ -6,7 +6,7 @@ import (
 	"github.com/lunghyun/CRUD_SERVER/init/cmd"
 )
 
-var configPathFlag = flag.String("config", "./config.toml", "config file path")
+var configPathFlag = flag.String("config", "./config.toml", "config file not found")
 
 func main() {
 	flag.Parse()
