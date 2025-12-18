@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lunghyun/CRUD_SERVER/types"
 )
 
 // 라우터
@@ -34,10 +35,21 @@ func newUserRouter(router *Network) *userRouter {
 
 func (u *userRouter) create(c *gin.Context) { // gin을 사용할때는 api라는 걸 명시하기 위해 context를 사용해야한다?
 	fmt.Println("userRouter create")
+
 }
 
 func (u *userRouter) get(c *gin.Context) {
 	fmt.Println("userRouter get")
+	u.router.okResponse(c, &types.UserResponse{
+		APIResponse: &types.APIResponse{
+			Result:      1,
+			Description: "success",
+		},
+		User: &types.User{
+			Name: "user",
+			Age:  24,
+		},
+	})
 }
 
 func (u *userRouter) update(c *gin.Context) {
