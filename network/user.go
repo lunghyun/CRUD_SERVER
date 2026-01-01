@@ -8,9 +8,11 @@ import (
 	"github.com/lunghyun/CRUD_SERVER/types"
 )
 
+// User API 핸들러들
+
 // 라우터
 var (
-	userRouterInit     sync.Once // 1번만 호출 되어야함
+	userRouterInit     sync.Once // 왜 싱글톤이냐? -> 중복 등록시 패닉됨 -> 패닉 방
 	userRouterInstance *userRouter
 )
 
@@ -33,7 +35,7 @@ func newUserRouter(router *Network) *userRouter {
 	return userRouterInstance
 }
 
-func (u *userRouter) create(c *gin.Context) { // gin을 사용할때는 api라는 걸 명시하기 위해 context를 사용해야한다?
+func (u *userRouter) create(c *gin.Context) {
 	fmt.Println("userRouter create")
 
 }

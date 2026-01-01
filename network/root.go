@@ -10,7 +10,7 @@ func NewNetwork() *Network {
 	r := &Network{
 		engine: gin.New(),
 	}
-	newUserRouter(r)
+	newUserRouter(r) // gin.engine에 엔드포인트 등록
 	return r
 }
 
