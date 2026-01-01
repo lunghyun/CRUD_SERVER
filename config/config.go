@@ -10,9 +10,7 @@ import (
 // 환경마다 다른 config, db 사용을 위해 분리
 
 type Config struct {
-	Server struct {
-		Port string
-	}
+	Server Server
 }
 
 func NewConfig(filePath string) *Config {
@@ -22,7 +20,7 @@ func NewConfig(filePath string) *Config {
 		panic(err)
 	} else if err = toml.NewDecoder(file).Decode(c); err != nil { // toml이 디코딩이 안되면
 		panic(err)
-	} else { // 다 되면, *Config 인스턴스를 제로값 구조체로 반환
-		return c
 	}
+	// 다 되면, *Config 인스턴스를 제로값 구조체로 반환
+	return c
 }
