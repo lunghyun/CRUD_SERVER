@@ -40,26 +40,53 @@ func newUserRouter(router *Network, userService *service.UserService) *userRoute
 func (u *userRouter) create(c *gin.Context) {
 	fmt.Println("userRouter create")
 
+	err := u.userService.Create(&types.User{
+		Name: "user",
+		Age:  24,
+	})
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	u.router.okResponse(c, &types.CreateUserResponse{
+		APIResponse: types.NewAPIResponse("성공입니다", 1),
+	})
 }
 
 func (u *userRouter) get(c *gin.Context) {
 	fmt.Println("userRouter get")
-	u.router.okResponse(c, &types.UserResponse{
-		APIResponse: &types.APIResponse{
-			Result:      1,
-			Description: "success",
-		},
-		User: &types.User{
-			Name: "user",
-			Age:  24,
-		},
+
+	u.router.okResponse(c, &types.GetUserResponse{
+		APIResponse: types.NewAPIResponse("성공입니다", 1),
+		Users:       u.userService.Get(),
 	})
 }
 
 func (u *userRouter) update(c *gin.Context) {
 	fmt.Println("userRouter update")
+
+	err := u.userService.Update(nil, nil)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	u.router.okResponse(c, &types.UpdateUserResponse{
+		APIResponse: types.NewAPIResponse("성공입니다", 1),
+	})
 }
 
 func (u *userRouter) delete(c *gin.Context) {
 	fmt.Println("userRouter delete")
+
+	err := u.userService.Delete(nil)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	u.router.okResponse(c, &types.DeleteUserResponse{
+		APIResponse: types.NewAPIResponse("성공입니다", 1),
+	})
 }

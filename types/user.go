@@ -1,6 +1,21 @@
 package types
 
-type UserResponse struct {
+type CreateUserResponse struct {
+	*APIResponse
+	*User
+}
+
+type GetUserResponse struct {
+	*APIResponse
+	Users []*User `json:"result"`
+}
+
+type UpdateUserResponse struct {
+	*APIResponse
+	*User
+}
+
+type DeleteUserResponse struct {
 	*APIResponse
 	*User
 }

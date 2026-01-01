@@ -1,6 +1,9 @@
 package service
 
-import "github.com/lunghyun/CRUD_SERVER/repository"
+import (
+	"github.com/lunghyun/CRUD_SERVER/repository"
+	"github.com/lunghyun/CRUD_SERVER/types"
+)
 
 type UserService struct {
 	userRepository *repository.UserRepository
@@ -10,4 +13,20 @@ func newUserService(userRepository *repository.UserRepository) *UserService {
 	return &UserService{
 		userRepository: userRepository,
 	}
+}
+
+func (u *UserService) Create(newUser *types.User) error {
+	return u.userRepository.Create(newUser)
+}
+
+func (u *UserService) Get() []*types.User {
+	return u.userRepository.Get()
+}
+
+func (u *UserService) Update(beforeUser *types.User, updatedUser *types.User) error {
+	return u.userRepository.Update(beforeUser, updatedUser)
+}
+
+func (u *UserService) Delete(user *types.User) error {
+	return u.userRepository.Delete(user)
 }
