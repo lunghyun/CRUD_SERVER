@@ -1,16 +1,22 @@
 package network
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	"github.com/lunghyun/CRUD_SERVER/service"
+)
 
 type Network struct {
 	engine *gin.Engine
+
+	service *service.Service
 }
 
-func NewNetwork() *Network {
+func NewNetwork(service *service.Service) *Network {
 	r := &Network{
-		engine: gin.New(),
+		engine:  gin.New(),
+		service: service,
 	}
-	newUserRouter(r) // gin.engine에 엔드포인트 등록
+	newUserRouter(r, service.UserService) // gin.engine에 엔드포인트 등록
 	return r
 }
 

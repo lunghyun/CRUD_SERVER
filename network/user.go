@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lunghyun/CRUD_SERVER/service"
 	"github.com/lunghyun/CRUD_SERVER/types"
 )
 
@@ -12,19 +13,20 @@ import (
 
 // 라우터
 var (
-	userRouterInit     sync.Once // 왜 싱글톤이냐? -> 중복 등록시 패닉됨 -> 패닉 방
+	userRouterInit     sync.Once // 왜 싱글톤이냐? -> 중복 등록시 패닉됨 -> 패닉 방지
 	userRouterInstance *userRouter
 )
 
 type userRouter struct {
-	router *Network
-	// service
+	router      *Network
+	userService *service.UserService
 }
 
-func newUserRouter(router *Network) *userRouter {
+func newUserRouter(router *Network, userService *service.UserService) *userRouter {
 	userRouterInit.Do(func() {
 		userRouterInstance = &userRouter{
-			router: router,
+			router:      router,
+			userService: userService,
 		}
 		router.registerGET("/", userRouterInstance.get)
 		router.registerDELETE("/", userRouterInstance.delete)
