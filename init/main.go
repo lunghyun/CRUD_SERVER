@@ -10,5 +10,8 @@ var configPathFlag = flag.String("config", "../env.toml", "config file path")
 
 func main() {
 	flag.Parse()
-	cmd.NewCmd(*configPathFlag)
+	_, err := cmd.NewCmd(*configPathFlag)
+	if err != nil {
+		panic(err)
+	}
 }

@@ -70,7 +70,7 @@ func (u *userRouter) update(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		u.router.failedResponse(c, &types.UpdateUserResponse{
-			APIResponse: types.NewAPIResponse("바인딩 에러입니다", -1, err.Error()),
+			APIResponse: types.NewAPIResponse("바인딩 오류입니다", -1, err.Error()),
 		})
 		return
 	}
@@ -98,7 +98,7 @@ func (u *userRouter) delete(c *gin.Context) {
 
 	if err := u.userService.Delete(req.ToUser()); err != nil {
 		u.router.failedResponse(c, &types.DeleteUserResponse{
-			APIResponse: types.NewAPIResponse("delete 오류입니다", -1, err.Error()),
+			APIResponse: types.NewAPIResponse("delete 에러입니다", -1, err.Error()),
 		})
 		return
 	}
