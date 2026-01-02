@@ -1,0 +1,42 @@
+services:
+#  database:
+#    container_name: crud-postgresql
+#    image: postgres:latest
+#    environment:
+#      POSTGRES_USER: ${DB_USER}
+#      POSTGRES_PASSWORD: ${DB_PASSWORD}
+#      POSTGRES_DB: ${DB_NAME}
+#    ports:
+#      - "${DB_PORT}:5432"
+#    volumes:
+#      - db_postgresql:/var/lib/postgresql/data
+  database:
+    container_name: crud-mysql
+    image: mysql:latest
+    environment:
+      MYSQL_USER: ${DB_USER}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:3306"
+    volumes:
+      - db_mysql:/data
+  storage:
+    container_name: crud-minio
+    image: minio/minio
+    command: server /data --console-address ":9001" # MinIO 실행시 실행할 명령어
+    environment:
+      MINIO_ROOT_USER: ${STORAGE_USER}
+      MINIO_ROOT_PASSWORD: ${STORAGE_PASSWORD}
+    ports:
+      - "${STORAGE_API_PORT}:9000"
+      - "${STORAGE_WEB_PORT}:9001"
+    volumes:
+      - minio_data:/data
+#  app:
+#    image: golang:alpine
+volumes:
+#  db_postgresql:
+  db_mysql:
+  minio_data:
