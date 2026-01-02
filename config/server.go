@@ -1,5 +1,5 @@
 package config
 
 type Server struct {
-	Port string
+	Port string `env:"PORT" envDefault:":8080"`
 }
