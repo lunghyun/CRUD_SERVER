@@ -3,6 +3,7 @@ package config
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -61,7 +62,7 @@ func (db *Database) NewConnection() (*sql.DB, error) {
 
 	// 5. 성공 시에만 전역 변수 할당
 	dbConnection = conn
-	fmt.Printf("DB 연결 성공: %s@%s:%s/%s\n", db.User, db.Host, db.Port, db.Name)
+	log.Printf("DB 연결 성공: %s@%s:%s/%s\n", db.User, db.Host, db.Port, db.Name)
 
 	return dbConnection, nil
 }

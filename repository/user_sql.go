@@ -36,7 +36,9 @@ func (u *UserSqlRepository) Get() []*types.User {
 	if err != nil {
 		return nil
 	}
-	defer rows.Close()
+	defer func() {
+		_ = rows.Close()
+	}()
 
 	var users []*types.User
 	for rows.Next() {

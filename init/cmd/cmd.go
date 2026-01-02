@@ -29,7 +29,10 @@ func NewCmd(filepath string) (*Cmd, error) {
 	if err != nil {
 		return nil, fmt.Errorf("DB 연결 실패: %w", err)
 	}
-	defer db.Close()
+
+	defer func() {
+		_ = db.Close()
+	}()
 
 	c.repository = repository.NewRepository(db)
 	c.service = service.NewService(c.repository)
