@@ -21,7 +21,6 @@ func (u *UserMemRepository) Create(newUser *types.User) error {
 	return nil
 }
 
-func (u *UserRepository) Get() []*types.User {
 func (u *UserMemRepository) Get() []*types.User {
 	return u.userMap
 }
