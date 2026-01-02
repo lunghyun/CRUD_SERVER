@@ -21,5 +21,5 @@ func NewNetwork(service *service.Service) *Network {
 }
 
 func (n *Network) ServerStart(port string) error {
-	return n.engine.Run(port)
+	return n.engine.Run(":" + port)
 }
