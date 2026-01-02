@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/lunghyun/CRUD_SERVER/config"
@@ -30,6 +29,7 @@ func NewCmd(filepath string) (*Cmd, error) {
 	if err != nil {
 		return nil, fmt.Errorf("DB 연결 실패: %w", err)
 	}
+	defer db.Close()
 
 	c.repository = repository.NewRepository(db)
 	c.service = service.NewService(c.repository)
@@ -40,8 +40,4 @@ func NewCmd(filepath string) (*Cmd, error) {
 	}
 
 	return c, nil
-}
-
-func (c *Cmd) Shutdown(ctx context.Context) error {
-	return c.config.Database.Close()
 }

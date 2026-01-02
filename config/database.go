@@ -5,10 +5,11 @@ import (
 	"fmt"
 	"sync"
 	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Database struct {
-	Driver   string `env:"DB_DRIVER"`
 	Host     string `env:"DB_HOST"`
 	Port     string `env:"DB_PORT"`
 	User     string `env:"DB_USER"`
@@ -41,9 +42,9 @@ func (db *Database) NewConnection() (*sql.DB, error) {
 	)
 
 	// 2. db connection 생성
-	conn, err := sql.Open(db.Driver, dsn)
+	conn, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return nil, fmt.Errorf("DB 연결 실패")
+		return nil, fmt.Errorf("DB 연결 실패: %w", err)
 	}
 
 	// 3. db connection pool 설정 (Spring HikariCP 기본값 적용)
