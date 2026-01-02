@@ -11,7 +11,9 @@ import (
 // 환경마다 다른 config, db 사용을 위해 분리
 
 type Config struct {
-	Server Server
+	Server   Server
+	Database Database
+	Storage  Storage
 }
 
 func NewConfig(filePath string) (*Config, error) {
