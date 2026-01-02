@@ -13,13 +13,13 @@ var (
 )
 
 type Repository struct {
-	User *UserRepository
+	User *UserMemRepository
 }
 
 func NewRepository() *Repository {
 	repositoryInit.Do(func() {
 		repositoryInstance = &Repository{
-			User: newUserRepository(),
+			User: newUserMemRepository(),
 		}
 	})
 

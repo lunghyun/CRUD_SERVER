@@ -5,27 +5,28 @@ import (
 	"github.com/lunghyun/CRUD_SERVER/types/cerrors"
 )
 
-type UserRepository struct {
+type UserMemRepository struct {
 	userMap []*types.User
 	// 나중에 db로 변경
 }
 
-func newUserRepository() *UserRepository {
-	return &UserRepository{
+func newUserMemRepository() *UserMemRepository {
+	return &UserMemRepository{
 		userMap: []*types.User{},
 	}
 }
 
-func (u *UserRepository) Create(newUser *types.User) error {
+func (u *UserMemRepository) Create(newUser *types.User) error {
 	u.userMap = append(u.userMap, newUser) // 이번엔 이런 검증까지는 안할 생각
 	return nil
 }
 
 func (u *UserRepository) Get() []*types.User {
+func (u *UserMemRepository) Get() []*types.User {
 	return u.userMap
 }
 
-func (u *UserRepository) Update(updatedUser *types.User) error {
+func (u *UserMemRepository) Update(updatedUser *types.User) error {
 	// name이 같은 user를 찾고, 수정
 	isExist := false
 
@@ -44,7 +45,7 @@ func (u *UserRepository) Update(updatedUser *types.User) error {
 	return nil
 }
 
-func (u *UserRepository) Delete(userName string) error {
+func (u *UserMemRepository) Delete(userName string) error {
 	// name과 age에 해당하는 user 삭제
 	isExist := false
 
