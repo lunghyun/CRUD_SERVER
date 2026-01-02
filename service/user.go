@@ -23,10 +23,10 @@ func (u *UserService) Get() []*types.User {
 	return u.userRepository.Get()
 }
 
-func (u *UserService) Update(beforeUser *types.User, updatedUser *types.User) error {
-	return u.userRepository.Update(beforeUser, updatedUser)
+func (u *UserService) Update(updatedUser *types.User) error {
+	return u.userRepository.Update(updatedUser)
 }
 
 func (u *UserService) Delete(user *types.User) error {
-	return u.userRepository.Delete(user)
+	return u.userRepository.Delete(user.Name)
 }

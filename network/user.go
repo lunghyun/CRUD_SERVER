@@ -1,7 +1,6 @@
 package network
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/gin-gonic/gin"
@@ -38,55 +37,73 @@ func newUserRouter(router *Network, userService *service.UserService) *userRoute
 }
 
 func (u *userRouter) create(c *gin.Context) {
-	fmt.Println("userRouter create")
+	var req types.CreateUserRequest
 
-	err := u.userService.Create(&types.User{
-		Name: "user",
-		Age:  24,
-	})
+	if err := c.ShouldBindJSON(&req); err != nil { // body로 들어오는 값을 검증, 파싱 -> req
+		u.router.failedResponse(c, &types.CreateUserResponse{
+			APIResponse: types.NewAPIResponse("바인딩 오류입니다.", -1, err.Error()),
+		})
+		return
+	}
 
-	if err != nil {
-		fmt.Println(err)
+	if err := u.userService.Create(req.ToUser()); err != nil {
+		u.router.failedResponse(c, &types.CreateUserResponse{
+			APIResponse: types.NewAPIResponse("create 에러입니다", -1, err.Error()),
+		})
+		return
 	}
 
 	u.router.okResponse(c, &types.CreateUserResponse{
-		APIResponse: types.NewAPIResponse("성공입니다", 1),
+		APIResponse: types.NewAPIResponse("성공입니다", 1, nil),
 	})
 }
 
 func (u *userRouter) get(c *gin.Context) {
-	fmt.Println("userRouter get")
-
 	u.router.okResponse(c, &types.GetUserResponse{
-		APIResponse: types.NewAPIResponse("성공입니다", 1),
+		APIResponse: types.NewAPIResponse("성공입니다", 1, nil),
 		Users:       u.userService.Get(),
 	})
 }
 
 func (u *userRouter) update(c *gin.Context) {
-	fmt.Println("userRouter update")
+	var req types.UpdateUserRequest
 
-	err := u.userService.Update(nil, nil)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		u.router.failedResponse(c, &types.UpdateUserResponse{
+			APIResponse: types.NewAPIResponse("바인딩 에러입니다", -1, err.Error()),
+		})
+		return
+	}
 
-	if err != nil {
-		fmt.Println(err)
+	if err := u.userService.Update(req.ToUser()); err != nil {
+		u.router.failedResponse(c, &types.UpdateUserResponse{
+			APIResponse: types.NewAPIResponse("update 에러입니다", -1, err.Error()),
+		})
+		return
 	}
 
 	u.router.okResponse(c, &types.UpdateUserResponse{
-		APIResponse: types.NewAPIResponse("성공입니다", 1),
+		APIResponse: types.NewAPIResponse("성공입니다", 1, nil),
 	})
 }
 
 func (u *userRouter) delete(c *gin.Context) {
-	fmt.Println("userRouter delete")
+	var req types.DeleteUserRequest
 
-	err := u.userService.Delete(nil)
+	if err := c.ShouldBindJSON(&req); err != nil {
+		u.router.failedResponse(c, &types.DeleteUserResponse{
+			APIResponse: types.NewAPIResponse("바인딩 오류입니다", -1, err.Error()),
+		})
+	}
 
-	if err != nil {
-		fmt.Println(err)
+	if err := u.userService.Delete(req.ToUser()); err != nil {
+		u.router.failedResponse(c, &types.DeleteUserResponse{
+			APIResponse: types.NewAPIResponse("delete 오류입니다", -1, err.Error()),
+		})
+		return
 	}
 
 	u.router.okResponse(c, &types.DeleteUserResponse{
-		APIResponse: types.NewAPIResponse("성공입니다", 1),
+		APIResponse: types.NewAPIResponse("성공입니다", 1, nil),
 	})
 }
