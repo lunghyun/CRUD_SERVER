@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/lunghyun/CRUD_SERVER/config"
@@ -25,13 +26,22 @@ func NewCmd(filepath string) (*Cmd, error) {
 	}
 	c.config = cfg
 
-	c.repository = repository.NewRepository()
+	db, err := c.config.Database.NewConnection()
+	if err != nil {
+		return nil, fmt.Errorf("DB 연결 실패: %w", err)
+	}
+
+	c.repository = repository.NewRepository(db)
 	c.service = service.NewService(c.repository)
 	c.network = network.NewNetwork(c.service)
 
 	if err = c.network.ServerStart(c.config.Server.Port); err != nil {
-		return nil, fmt.Errorf("서버가 시작되지 못함: %w", err)
+		return nil, fmt.Errorf("서버 시작 실패: %w", err)
 	}
 
 	return c, nil
+}
+
+func (c *Cmd) Shutdown(ctx context.Context) error {
+	return c.config.Database.Close()
 }

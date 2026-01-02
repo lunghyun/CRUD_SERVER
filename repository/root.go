@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"database/sql"
 	"sync"
 )
 
@@ -13,13 +14,13 @@ var (
 )
 
 type Repository struct {
-	User *UserMemRepository
+	User UserRepository
 }
 
-func NewRepository() *Repository {
+func NewRepository(db *sql.DB) *Repository {
 	repositoryInit.Do(func() {
 		repositoryInstance = &Repository{
-			User: newUserMemRepository(),
+			User: newUserSqlRepository(db), // 구현체는 여기 주입
 		}
 	})
 
