@@ -27,14 +27,14 @@ type CreateUserResponse struct {
 }
 
 type UpdateUserRequest struct {
-	Name       string `json:"name" binding:"required"`
-	UpdatedAge int    `json:"updated_age" binding:"required"`
+	Name string `json:"name" binding:"required"`
+	Age  int    `json:"age" binding:"required"`
 }
 
 func (c *UpdateUserRequest) ToUser() *User {
 	return &User{
 		Name: c.Name,
-		Age:  c.UpdatedAge,
+		Age:  c.Age,
 	}
 }
 

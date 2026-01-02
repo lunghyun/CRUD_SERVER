@@ -1,6 +1,9 @@
 package repository
 
-import "github.com/lunghyun/CRUD_SERVER/types"
+import (
+	"github.com/lunghyun/CRUD_SERVER/types"
+	"github.com/lunghyun/CRUD_SERVER/types/cerrors"
+)
 
 type UserRepository struct {
 	userMap []*types.User
@@ -34,7 +37,8 @@ func (u *UserRepository) Update(updatedUser *types.User) error {
 	}
 
 	if !isExist {
-		return nil // TOdo 에러처리
+		// err메세지가 있다면, arg에 err.Error()를 넘겨주는것도 방법
+		return cerrors.Errorf(cerrors.NotFoundUser, nil)
 	}
 
 	return nil
@@ -53,7 +57,7 @@ func (u *UserRepository) Delete(userName string) error {
 	}
 
 	if !isExist {
-		return nil // Todo 에러코드작성해야함
+		return cerrors.Errorf(cerrors.NotFoundUser, nil)
 	}
 
 	return nil
