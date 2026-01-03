@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"sync"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -19,14 +18,10 @@ type Database struct {
 }
 
 var (
-	dbMutex      sync.Mutex
 	dbConnection *sql.DB
 )
 
 func (db *Database) NewDatabase() (*sql.DB, error) {
-	dbMutex.Lock()
-	defer dbMutex.Unlock()
-
 	// 이미 연결 성공 -> 기존 커넥션 재사용
 	if dbConnection != nil {
 		return dbConnection, nil
