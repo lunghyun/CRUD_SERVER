@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/lunghyun/CRUD_SERVER/repository"
-	"github.com/lunghyun/CRUD_SERVER/types"
+	"github.com/lunghyun/CRUD_SERVER/internal/repository"
+	"github.com/lunghyun/CRUD_SERVER/internal/types"
 )
 
 type UserService struct {

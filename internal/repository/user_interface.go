@@ -1,6 +1,8 @@
 package repository
 
-import "github.com/lunghyun/CRUD_SERVER/types"
+import (
+	"github.com/lunghyun/CRUD_SERVER/internal/types"
+)
 
 type UserRepository interface {
 	Create(*types.User) error

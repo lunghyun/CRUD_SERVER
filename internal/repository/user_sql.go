@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/lunghyun/CRUD_SERVER/types"
+	"github.com/lunghyun/CRUD_SERVER/internal/types"
 )
 
 type UserSqlRepository struct {

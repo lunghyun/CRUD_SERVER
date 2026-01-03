@@ -3,7 +3,7 @@ package service
 import (
 	"sync"
 
-	"github.com/lunghyun/CRUD_SERVER/repository"
+	"github.com/lunghyun/CRUD_SERVER/internal/repository"
 )
 
 // network와 repository의 다리 역할

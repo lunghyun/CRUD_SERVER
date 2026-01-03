@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/lunghyun/CRUD_SERVER/types"
-	"github.com/lunghyun/CRUD_SERVER/types/cerrors"
+	"github.com/lunghyun/CRUD_SERVER/internal/types"
+	"github.com/lunghyun/CRUD_SERVER/internal/types/cerrors"
 )
 
 type UserMemRepository struct {

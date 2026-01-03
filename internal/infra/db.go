@@ -7,7 +7,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/lunghyun/CRUD_SERVER/config"
+	"github.com/lunghyun/CRUD_SERVER/internal/config"
 )
 
 type DB struct {

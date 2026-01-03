@@ -9,11 +9,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/lunghyun/CRUD_SERVER/config"
-	"github.com/lunghyun/CRUD_SERVER/infra"
-	"github.com/lunghyun/CRUD_SERVER/network"
-	"github.com/lunghyun/CRUD_SERVER/repository"
-	"github.com/lunghyun/CRUD_SERVER/service"
+	"github.com/lunghyun/CRUD_SERVER/internal/config"
+	"github.com/lunghyun/CRUD_SERVER/internal/infra"
+	"github.com/lunghyun/CRUD_SERVER/internal/network"
+	"github.com/lunghyun/CRUD_SERVER/internal/repository"
+	"github.com/lunghyun/CRUD_SERVER/internal/service"
 )
 
 type Cmd struct {
