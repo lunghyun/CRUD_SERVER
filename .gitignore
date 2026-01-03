@@ -1,5 +1,5 @@
 .idea/*
 env*
 .env*
-docs/
+docs/tmp
 CLAUDE.md
