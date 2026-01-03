@@ -30,10 +30,6 @@ func NewCmd(filepath string) (*Cmd, error) {
 		return nil, fmt.Errorf("DB 연결 실패: %w", err)
 	}
 
-	defer func() {
-		_ = db.Close()
-	}()
-
 	c.repository = repository.NewRepository(db)
 	c.service = service.NewService(c.repository)
 	c.network = network.NewNetwork(c.service)
