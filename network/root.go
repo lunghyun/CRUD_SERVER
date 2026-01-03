@@ -1,6 +1,8 @@
 package network
 
 import (
+	"context"
+
 	"github.com/gin-gonic/gin"
 	"github.com/lunghyun/CRUD_SERVER/service"
 )
@@ -22,4 +24,9 @@ func NewNetwork(service *service.Service) *Network {
 
 func (n *Network) ServerStart(port string) error {
 	return n.engine.Run(":" + port)
+}
+
+func (n *Network) ServerStop(ctx context.Context) error {
+	// TODO gin.Engine의 stop 메서드가 없으니 고민
+	return nil
 }

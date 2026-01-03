@@ -1,7 +1,13 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/lunghyun/CRUD_SERVER/config"
 	"github.com/lunghyun/CRUD_SERVER/infra"
@@ -37,10 +43,37 @@ func NewCmd(filepath string) (*Cmd, error) {
 	c.service = service.NewService(c.repository)
 	c.network = network.NewNetwork(c.service)
 
-	// TODO 고루틴으로 변경 -> blocking에 의지되는 상태 해제
-	if err = c.network.ServerStart(c.config.Server.Port); err != nil {
-		return nil, fmt.Errorf("서버 시작 실패: %w", err)
+	return c, nil
+}
+
+func (c *Cmd) Run() error {
+	// 고루틴으로 변경 -> blocking에 의지되는 상태 해제
+
+	// 1. 서버 시작
+	// TODO 근데 ServerStart가 이미 고루틴아닌가
+	go func() {
+		if err := c.network.ServerStart(c.config.Server.Port); err != nil {
+			log.Printf("서버 시작 실패: %v\n", err)
+		}
+	}()
+
+	// 2. signal 대기 : ctrl+c, kill
+	quitSign := make(chan os.Signal, 1)
+	signal.Notify(quitSign, syscall.SIGINT, syscall.SIGTERM)
+	<-quitSign
+	log.Println("서버 종료 중...")
+
+	// 3. Graceful shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := c.network.ServerStop(ctx); err != nil {
+		log.Printf("서버 종료 에러: %v\n", err)
 	}
 
-	return c, nil
+	// 4. DB shutdown
+	if err := c.database.Close(); err != nil {
+		log.Printf("DB close 에러: %v\n", err)
+	}
+
+	return nil
 }
