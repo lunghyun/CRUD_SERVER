@@ -49,18 +49,27 @@ func NewCmd(filepath string) (*Cmd, error) {
 func (c *Cmd) Run() error {
 	// 고루틴으로 변경 -> blocking에 의지되는 상태 해제
 
+	// 서버 에러를 받는 채널
+	errChan := make(chan error, 1)
+
 	// 1. 서버 시작
 	go func() {
 		if err := c.network.ServerStart(c.config.Server.Port); err != nil {
-			log.Printf("서버 시작 실패: %v\n", err)
+			errChan <- err
 		}
 	}()
 
 	// 2. signal 대기 : ctrl+c, kill
 	quitSign := make(chan os.Signal, 1)
 	signal.Notify(quitSign, syscall.SIGINT, syscall.SIGTERM)
-	<-quitSign
-	log.Println("서버 종료 중...")
+
+	select {
+	case err := <-errChan:
+		log.Printf("서버 시작 실패: %v\n", err)
+		return err
+	case <-quitSign:
+		log.Println("서버 종료 중...")
+	}
 
 	// 3. Graceful shutdown (timeout: 5s)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
