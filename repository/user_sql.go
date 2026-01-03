@@ -56,9 +56,20 @@ func (u *UserSqlRepository) Update(updatedUser *types.User) error {
 	// name이 같은 user를 찾고, 수정
 	query := `UPDATE users SET age = ? WHERE name = ?`
 
-	_, err := u.db.Exec(query, updatedUser.Age, updatedUser.Name)
+	result, err := u.db.Exec(query, updatedUser.Age, updatedUser.Name)
 	if err != nil {
 		return fmt.Errorf("user 수정 실패: %w", err)
+	}
+
+	rows, err := result.RowsAffected()
+	// 인프라 오류
+	if err != nil {
+		return fmt.Errorf("row affected 실패: %w", err)
+	}
+
+	// name에 해당하는 row가 없으면 -> err가 nil이라서 래핑 안함
+	if rows == 0 {
+		return fmt.Errorf("user not found: name=%s", updatedUser.Name)
 	}
 
 	return nil
@@ -68,9 +79,18 @@ func (u *UserSqlRepository) Delete(userName string) error {
 	// name에 해당하는 user 삭제
 	query := `DELETE FROM users WHERE name = ?`
 
-	_, err := u.db.Exec(query, userName)
+	result, err := u.db.Exec(query, userName)
 	if err != nil {
 		return fmt.Errorf("user 삭제 실패: %w", err)
+	}
+
+	rows, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("row affected 실패: %w", err)
+	}
+
+	if rows == 0 {
+		return fmt.Errorf("user not found: name=%s", userName)
 	}
 
 	return nil
