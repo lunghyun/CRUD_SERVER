@@ -63,7 +63,7 @@ func (c *Cmd) Run() error {
 	<-quitSign
 	log.Println("서버 종료 중...")
 
-	// 3. Graceful shutdown
+	// 3. Graceful shutdown (timeout: 5s)
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := c.network.ServerStop(ctx); err != nil {
