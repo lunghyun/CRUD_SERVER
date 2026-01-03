@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/lunghyun/CRUD_SERVER/internal/types"
+	"github.com/lunghyun/CRUD_SERVER/internal/types/cerrors"
 )
 
 type UserRepository interface {
@@ -76,7 +77,7 @@ func (u *UserSqlRepository) Update(updatedUser *types.User) error {
 
 	// name에 해당하는 row가 없으면 -> err가 nil이라서 래핑 안함
 	if rows == 0 {
-		return fmt.Errorf("user not found: name=%s", updatedUser.Name)
+		return cerrors.Errorf(cerrors.NotFoundUser, nil)
 	}
 
 	return nil
@@ -97,7 +98,7 @@ func (u *UserSqlRepository) Delete(userName string) error {
 	}
 
 	if rows == 0 {
-		return fmt.Errorf("user not found: name=%s", userName)
+		return cerrors.Errorf(cerrors.NotFoundUser, nil)
 	}
 
 	return nil
