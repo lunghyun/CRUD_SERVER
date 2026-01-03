@@ -23,7 +23,7 @@ var (
 	dbConnection *sql.DB
 )
 
-func (db *Database) NewConnection() (*sql.DB, error) {
+func (db *Database) NewDatabase() (*sql.DB, error) {
 	dbMutex.Lock()
 	defer dbMutex.Unlock()
 
