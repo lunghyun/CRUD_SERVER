@@ -50,7 +50,6 @@ func (c *Cmd) Run() error {
 	// 고루틴으로 변경 -> blocking에 의지되는 상태 해제
 
 	// 1. 서버 시작
-	// TODO 근데 ServerStart가 이미 고루틴아닌가
 	go func() {
 		if err := c.network.ServerStart(c.config.Server.Port); err != nil {
 			log.Printf("서버 시작 실패: %v\n", err)

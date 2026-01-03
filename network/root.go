@@ -41,10 +41,9 @@ func (n *Network) ServerStart(port string) error {
 }
 
 func (n *Network) ServerStop(ctx context.Context) error {
-	// TODO gin.Engine의 stop 메서드가 없으니 고민
 	if n.server == nil {
 		return nil
 	}
-	// TODO ctx는 뭘 해주는거지? 내부적으로 어떤 일이 일어나는거임? 몰라도 되나?
+	// context : 타임아웃 시간 제어
 	return n.server.Shutdown(ctx)
 }

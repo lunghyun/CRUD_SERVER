@@ -16,7 +16,6 @@ func main() {
 	}
 
 	// blocking + 내부 graceful shutdown
-	// TODO panic해야하는지 고민
 	if err = c.Run(); err != nil {
 		panic(err)
 	}
