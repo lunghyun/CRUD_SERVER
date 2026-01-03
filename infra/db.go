@@ -43,7 +43,7 @@ func NewDB(cfg config.Database) (*DB, error) {
 		return nil, fmt.Errorf("DB ping 실패: %w", err)
 	}
 
-	// 5. 성공 시에만 전역 변수 할당
+	// 5. 성공 시에만 인스턴스에 할당
 	log.Printf("DB 연결 성공: %s@%s:%s/%s\n", cfg.User, cfg.Host, cfg.Port, cfg.Name)
 
 	return &DB{Conn: conn}, nil
