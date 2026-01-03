@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"database/sql"
 	"fmt"
 
 	"github.com/lunghyun/CRUD_SERVER/config"
+	"github.com/lunghyun/CRUD_SERVER/infra"
 	"github.com/lunghyun/CRUD_SERVER/network"
 	"github.com/lunghyun/CRUD_SERVER/repository"
 	"github.com/lunghyun/CRUD_SERVER/service"
@@ -12,7 +12,7 @@ import (
 
 type Cmd struct {
 	config     *config.Config
-	database   *sql.DB
+	database   *infra.DB
 	network    *network.Network
 	repository *repository.Repository
 	service    *service.Service
@@ -27,16 +27,17 @@ func NewCmd(filepath string) (*Cmd, error) {
 	}
 	c.config = cfg
 
-	db, err := c.config.Database.NewDatabase()
+	dbConn, err := infra.NewDB(c.config.Database)
 	if err != nil {
 		return nil, fmt.Errorf("DB 연결 실패: %w", err)
 	}
-	c.database = db
+	c.database = dbConn
 
-	c.repository = repository.NewRepository(c.database)
+	c.repository = repository.NewRepository(c.database.Conn)
 	c.service = service.NewService(c.repository)
 	c.network = network.NewNetwork(c.service)
 
+	// TODO 고루틴으로 변경 -> blocking에 의지되는 상태 해제
 	if err = c.network.ServerStart(c.config.Server.Port); err != nil {
 		return nil, fmt.Errorf("서버 시작 실패: %w", err)
 	}
