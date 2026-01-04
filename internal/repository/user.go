@@ -56,6 +56,9 @@ func (u *UserSqlRepository) Get() ([]*types.User, error) {
 		}
 		users = append(users, user)
 	}
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("rows.Next() 오류: %w", err)
+	}
 
 	return users, nil
 }
