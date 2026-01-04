@@ -10,7 +10,7 @@ import (
 
 type UserRepository interface {
 	Create(*types.User) error
-	Get() []*types.User
+	Get() ([]*types.User, error)
 	Update(*types.User) error
 	Delete(string) error
 }
@@ -36,13 +36,13 @@ func (u *UserSqlRepository) Create(newUser *types.User) error {
 	return nil
 }
 
-func (u *UserSqlRepository) Get() []*types.User {
+func (u *UserSqlRepository) Get() ([]*types.User, error) {
 	// SELECT * FROM users
 	query := `SELECT name, age FROM users`
 
 	rows, err := u.db.Query(query)
 	if err != nil {
-		return nil
+		return nil, fmt.Errorf("user 조회 실패: %w", err)
 	}
 	defer func() {
 		_ = rows.Close()
@@ -57,7 +57,7 @@ func (u *UserSqlRepository) Get() []*types.User {
 		users = append(users, user)
 	}
 
-	return users
+	return users, nil
 }
 
 func (u *UserSqlRepository) Update(updatedUser *types.User) error {

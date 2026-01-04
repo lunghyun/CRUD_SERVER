@@ -19,7 +19,7 @@ func (u *UserService) Create(newUser *types.User) error {
 	return u.userRepository.Create(newUser)
 }
 
-func (u *UserService) Get() []*types.User {
+func (u *UserService) Get() ([]*types.User, error) {
 	return u.userRepository.Get()
 }
 
