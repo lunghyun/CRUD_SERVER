@@ -29,7 +29,7 @@ func newUserSqlRepository(db *sql.DB) *UserSqlRepository {
 func (u *UserSqlRepository) Create(ctx context.Context, newUser *types.User) error {
 	//u.userMap = append(u.userMap, newUser)
 	query := `INSERT INTO users (name, age) VALUES (?, ?)`
-	_, err := u.db.Exec(query, newUser.Name, newUser.Age)
+	_, err := u.db.ExecContext(ctx, query, newUser.Name, newUser.Age)
 	if err != nil {
 		return fmt.Errorf("user 생성 실패: %w", err)
 	}
@@ -41,7 +41,7 @@ func (u *UserSqlRepository) Get(ctx context.Context) ([]*types.User, error) {
 	// SELECT * FROM users
 	query := `SELECT name, age FROM users`
 
-	rows, err := u.db.Query(query)
+	rows, err := u.db.QueryContext(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("user 조회 실패: %w", err)
 	}
@@ -68,7 +68,7 @@ func (u *UserSqlRepository) Update(ctx context.Context, updatedUser *types.User)
 	// name이 같은 user를 찾고, 수정
 	query := `UPDATE users SET age = ? WHERE name = ?`
 
-	result, err := u.db.Exec(query, updatedUser.Age, updatedUser.Name)
+	result, err := u.db.ExecContext(ctx, query, updatedUser.Age, updatedUser.Name)
 	if err != nil {
 		return fmt.Errorf("user 수정 실패: %w", err)
 	}
@@ -91,7 +91,7 @@ func (u *UserSqlRepository) Delete(ctx context.Context, userName string) error {
 	// name에 해당하는 user 삭제
 	query := `DELETE FROM users WHERE name = ?`
 
-	result, err := u.db.Exec(query, userName)
+	result, err := u.db.ExecContext(ctx, query, userName)
 	if err != nil {
 		return fmt.Errorf("user 삭제 실패: %w", err)
 	}
