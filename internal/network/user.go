@@ -65,6 +65,7 @@ func (u *userRouter) get(c *gin.Context) {
 		u.router.failedResponse(c, &types.GetUserResponse{
 			APIResponse: types.NewAPIResponse("조회 실패입니다", -1, err.Error()),
 		})
+		return
 	}
 	u.router.okResponse(c, &types.GetUserResponse{
 		APIResponse: types.NewAPIResponse("성공입니다", 1, nil),
