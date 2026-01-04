@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/lunghyun/CRUD_SERVER/internal/repository"
 	"github.com/lunghyun/CRUD_SERVER/internal/types"
 )
@@ -15,18 +17,18 @@ func newUserService(userRepository repository.UserRepository) *UserService {
 	}
 }
 
-func (u *UserService) Create(newUser *types.User) error {
-	return u.userRepository.Create(newUser)
+func (u *UserService) Create(ctx context.Context, newUser *types.User) error {
+	return u.userRepository.Create(ctx, newUser)
 }
 
-func (u *UserService) Get() ([]*types.User, error) {
-	return u.userRepository.Get()
+func (u *UserService) Get(ctx context.Context) ([]*types.User, error) {
+	return u.userRepository.Get(ctx)
 }
 
-func (u *UserService) Update(updatedUser *types.User) error {
-	return u.userRepository.Update(updatedUser)
+func (u *UserService) Update(ctx context.Context, updatedUser *types.User) error {
+	return u.userRepository.Update(ctx, updatedUser)
 }
 
-func (u *UserService) Delete(user *types.User) error {
-	return u.userRepository.Delete(user.Name)
+func (u *UserService) Delete(ctx context.Context, user *types.User) error {
+	return u.userRepository.Delete(ctx, user.Name)
 }

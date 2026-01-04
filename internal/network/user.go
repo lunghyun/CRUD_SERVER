@@ -47,7 +47,8 @@ func (u *userRouter) create(c *gin.Context) {
 		return
 	}
 
-	if err := u.userService.Create(req.ToUser()); err != nil {
+	ctx := c.Request.Context()
+	if err := u.userService.Create(ctx, req.ToUser()); err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.CreateUserResponse{
 			APIResponse: types.NewAPIResponse("create 에러입니다", -1, err.Error()),
 		})
@@ -61,7 +62,8 @@ func (u *userRouter) create(c *gin.Context) {
 
 func (u *userRouter) get(c *gin.Context) {
 	// Users:       u.userService.Get()
-	user, err := u.userService.Get()
+	ctx := c.Request.Context()
+	user, err := u.userService.Get(ctx)
 	if err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.GetUserResponse{
 			APIResponse: types.NewAPIResponse("조회 실패입니다", -1, err.Error()),
@@ -84,7 +86,8 @@ func (u *userRouter) update(c *gin.Context) {
 		return
 	}
 
-	if err := u.userService.Update(req.ToUser()); err != nil {
+	ctx := c.Request.Context()
+	if err := u.userService.Update(ctx, req.ToUser()); err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.UpdateUserResponse{
 			APIResponse: types.NewAPIResponse("update 에러입니다", -1, err.Error()),
 		})
@@ -106,7 +109,8 @@ func (u *userRouter) delete(c *gin.Context) {
 		return
 	}
 
-	if err := u.userService.Delete(req.ToUser()); err != nil {
+	ctx := c.Request.Context()
+	if err := u.userService.Delete(ctx, req.ToUser()); err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.DeleteUserResponse{
 			APIResponse: types.NewAPIResponse("delete 에러입니다", -1, err.Error()),
 		})

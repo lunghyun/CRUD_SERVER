@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 
@@ -9,10 +10,10 @@ import (
 )
 
 type UserRepository interface {
-	Create(*types.User) error
-	Get() ([]*types.User, error)
-	Update(*types.User) error
-	Delete(string) error
+	Create(context.Context, *types.User) error
+	Get(context.Context) ([]*types.User, error)
+	Update(context.Context, *types.User) error
+	Delete(context.Context, string) error
 }
 
 type UserSqlRepository struct {
@@ -25,7 +26,7 @@ func newUserSqlRepository(db *sql.DB) *UserSqlRepository {
 	}
 }
 
-func (u *UserSqlRepository) Create(newUser *types.User) error {
+func (u *UserSqlRepository) Create(ctx context.Context, newUser *types.User) error {
 	//u.userMap = append(u.userMap, newUser)
 	query := `INSERT INTO users (name, age) VALUES (?, ?)`
 	_, err := u.db.Exec(query, newUser.Name, newUser.Age)
@@ -36,7 +37,7 @@ func (u *UserSqlRepository) Create(newUser *types.User) error {
 	return nil
 }
 
-func (u *UserSqlRepository) Get() ([]*types.User, error) {
+func (u *UserSqlRepository) Get(ctx context.Context) ([]*types.User, error) {
 	// SELECT * FROM users
 	query := `SELECT name, age FROM users`
 
@@ -63,7 +64,7 @@ func (u *UserSqlRepository) Get() ([]*types.User, error) {
 	return users, nil
 }
 
-func (u *UserSqlRepository) Update(updatedUser *types.User) error {
+func (u *UserSqlRepository) Update(ctx context.Context, updatedUser *types.User) error {
 	// name이 같은 user를 찾고, 수정
 	query := `UPDATE users SET age = ? WHERE name = ?`
 
@@ -86,7 +87,7 @@ func (u *UserSqlRepository) Update(updatedUser *types.User) error {
 	return nil
 }
 
-func (u *UserSqlRepository) Delete(userName string) error {
+func (u *UserSqlRepository) Delete(ctx context.Context, userName string) error {
 	// name에 해당하는 user 삭제
 	query := `DELETE FROM users WHERE name = ?`
 
