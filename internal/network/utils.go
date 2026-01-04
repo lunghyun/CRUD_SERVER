@@ -1,6 +1,8 @@
 package network
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+)
 
 // register 유틸 함수들
 func (n *Network) registerGET(path string, handler ...gin.HandlerFunc) gin.IRoutes {
@@ -24,6 +26,10 @@ func (n *Network) okResponse(c *gin.Context, result interface{}) {
 	c.JSON(200, result)
 }
 
-func (n *Network) failedResponse(c *gin.Context, result interface{}) {
-	c.JSON(400, result)
+func (n *Network) createResponse(c *gin.Context, result interface{}) {
+	c.JSON(201, result)
+}
+
+func (n *Network) failedResponse(c *gin.Context, status int, result interface{}) {
+	c.JSON(status, result)
 }

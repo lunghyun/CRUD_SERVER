@@ -1,11 +1,17 @@
 package cerrors
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // 에러 관련 타입 및 함수들을 정의
 
 const (
-	NotFoundUser = iota
+	BadRequestBind = http.StatusBadRequest
+	NotFoundUser   = http.StatusNotFound
+
+	InternalServerError = http.StatusInternalServerError
 )
 
 var errMessage = map[int64]string{
