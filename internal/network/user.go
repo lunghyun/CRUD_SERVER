@@ -94,6 +94,7 @@ func (u *userRouter) delete(c *gin.Context) {
 		u.router.failedResponse(c, &types2.DeleteUserResponse{
 			APIResponse: types2.NewAPIResponse("바인딩 오류입니다", -1, err.Error()),
 		})
+		return
 	}
 
 	if err := u.userService.Delete(req.ToUser()); err != nil {
