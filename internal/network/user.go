@@ -1,9 +1,7 @@
 package network
 
 import (
-	"context"
 	"sync"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/lunghyun/CRUD_SERVER/internal/service"
@@ -40,9 +38,6 @@ func newUserRouter(router *Network, userService *service.UserService) *userRoute
 }
 
 func (u *userRouter) create(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Second*30)
-	defer cancel()
-
 	var req types.CreateUserRequest
 	if err := c.ShouldBindJSON(&req); err != nil { // body로 들어오는 값을 검증, 파싱 -> req
 		u.router.failedResponse(c, cerrors.BadRequestBind, &types.CreateUserResponse{
@@ -51,7 +46,7 @@ func (u *userRouter) create(c *gin.Context) {
 		return
 	}
 
-	if err := u.userService.Create(ctx, req.ToUser()); err != nil {
+	if err := u.userService.Create(c.Request.Context(), req.ToUser()); err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.CreateUserResponse{
 			APIResponse: types.NewAPIResponse("create 에러입니다", -1, err.Error()),
 		})
@@ -64,11 +59,7 @@ func (u *userRouter) create(c *gin.Context) {
 }
 
 func (u *userRouter) get(c *gin.Context) {
-	// Users:       u.userService.Get()
-	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Second*30)
-	defer cancel()
-
-	user, err := u.userService.Get(ctx)
+	user, err := u.userService.Get(c.Request.Context())
 	if err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.GetUserResponse{
 			APIResponse: types.NewAPIResponse("조회 실패입니다", -1, err.Error()),
@@ -82,9 +73,6 @@ func (u *userRouter) get(c *gin.Context) {
 }
 
 func (u *userRouter) update(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Second*30)
-	defer cancel()
-
 	var req types.UpdateUserRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -94,7 +82,7 @@ func (u *userRouter) update(c *gin.Context) {
 		return
 	}
 
-	if err := u.userService.Update(ctx, req.ToUser()); err != nil {
+	if err := u.userService.Update(c.Request.Context(), req.ToUser()); err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.UpdateUserResponse{
 			APIResponse: types.NewAPIResponse("update 에러입니다", -1, err.Error()),
 		})
@@ -107,9 +95,6 @@ func (u *userRouter) update(c *gin.Context) {
 }
 
 func (u *userRouter) delete(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c.Request.Context(), time.Second*30)
-	defer cancel()
-
 	var req types.DeleteUserRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -119,7 +104,7 @@ func (u *userRouter) delete(c *gin.Context) {
 		return
 	}
 
-	if err := u.userService.Delete(ctx, req.ToUser()); err != nil {
+	if err := u.userService.Delete(c.Request.Context(), req.ToUser()); err != nil {
 		u.router.failedResponse(c, cerrors.InternalServerError, &types.DeleteUserResponse{
 			APIResponse: types.NewAPIResponse("delete 에러입니다", -1, err.Error()),
 		})
