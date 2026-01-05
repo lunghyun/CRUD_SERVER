@@ -14,6 +14,15 @@
 - go스러운 구성을 위해 최소한의 프레임워크 도입 (`sqlc`)
 
 ## 그래서 뭘 할까
+### 1. Context 미들웨어 구성
+- [x] ***is it Done?***
+
+### 2. Transaction 구현
+- [ ] ***is it Done?***
+
+### 3. `sqlc` 도입
+- [ ] ***is it Done?***
+
 
 ## 추가적으로 고려되는것(하다보니)
 ### 1. Spring Boot Timeout Settings
