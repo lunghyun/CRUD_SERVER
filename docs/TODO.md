@@ -19,6 +19,53 @@
 
 ### 2. Transaction 구현
 - [ ] ***is it Done?***
+#### 트랜잭션 로직은 2가지 케이스으로 이루어짐
+1. 정상 케이스
+    - tx 시작(tx, err := db.Begin())
+    - 작업 1..
+    - 작업 2..
+    - 작업 3..
+    - 커밋 (tx.Commit())
+2. 에러 케이스
+   - tx 시작
+   - 작업 1..
+   - 작업 2..
+   - 작업 3 실패
+   - 롤백(tx.Rollback())
+> #### Rollback을 defer로 지정해도 될까?
+> 된다고 생각함.
+> 1. 조기 리턴할 경우, Rollback 
+>    - 의도한 실행
+> 2. 정상 리턴할 경우, Commit후 Rollback
+>    - Commit or Rollback이 한 번이라도 성공 -> 해당 트랜잭션은 종료됨
+>    - 의도한 실행
+
+알아야할 메서드
+```go
+tx, err := db.BeginTx(ctx, nil)
+```
+- 트랜잭션 시작
+- *sql.Tx 객체 반환
+- 커넥션을 하나 잡고, 트랜잭션 작업으로 기록
+```go
+tx.ExecContext(ctx, query, ...)
+```
+- 쿼리 실행
+- DB 반영 x, 임시 저장
+- db.ExecContext와 동일하지만 tx 범위 안에서 실행됨
+```go
+tx.Commit()
+```
+- 커밋
+- 임시 저장한 db 작업 반영
+```go
+tx.Rollback()
+```
+- 롤백
+- 모든 임시 작업 취소: db 상태를 트랜잭션 시작 전으로
+> 컨텍스트 인자 값은, 해당 트랜잭션이 ctx에 종속된다는 뜻
+
+#### 구현은 인터페이스로(transaction, 일반 db용 메서드가 나눠짐)
 
 ### 3. `sqlc` 도입
 - [ ] ***is it Done?***
