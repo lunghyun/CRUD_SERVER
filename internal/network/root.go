@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lunghyun/CRUD_SERVER/internal/middleware"
 	"github.com/lunghyun/CRUD_SERVER/internal/service"
 )
 
@@ -24,7 +25,7 @@ func NewNetwork(service *service.Service) *Network {
 	}
 
 	// 모든 요청에 30초 timeout context 적용
-	r.engine.Use(TimeoutMiddleware(30 * time.Second))
+	r.engine.Use(middleware.TimeoutMiddleware(30 * time.Second))
 
 	newUserRouter(r, service.UserService) // gin.engine에 엔드포인트 등록
 	return r

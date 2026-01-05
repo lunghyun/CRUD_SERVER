@@ -1,4 +1,4 @@
-package network
+package middleware
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// TimeoutMiddleware 모든 요청에 30초 timeout context를 설정합니다
+// TimeoutMiddleware 모든 요청에 timeout context를 설정합니다
 func TimeoutMiddleware(timeout time.Duration) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(c.Request.Context(), timeout)
