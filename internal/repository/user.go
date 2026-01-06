@@ -32,7 +32,7 @@ func (u *UserSqlRepository) Create(ctx context.Context, newUser *types.User) err
 
 func (u *UserSqlRepository) Get(ctx context.Context) ([]*types.User, error) {
 	// SELECT * FROM users
-	query := `SELECT name, age FROM users`
+	query := `SELECT id, name, age FROM users`
 
 	rows, err := u.db.QueryContext(ctx, query)
 	if err != nil {

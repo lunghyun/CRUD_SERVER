@@ -69,6 +69,69 @@ tx.Rollback()
 
 ### 3. `sqlc` 도입
 - [ ] ***is it Done?***
+- ORM은 아님
+  - sql 추상화
+- sql기반 코드 생성기
+  - sql 직접 사용
+  - 런타임 오버헤드 없음
+
+#### 사용법 ([SQLC Docs](https://docs.sqlc.dev/en/stable/tutorials/getting-started-mysql.html))
+1. 환경에 설치
+    ```go
+    go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+    ```
+2. `sqlc.[yaml | yml]` or `sqlc.json`작성
+    ```yaml
+    version: 2
+    sql:
+      - engine: "mysql" # 사용할 driver
+        queries: "internal/queries" # 사용할 쿼리문 -> 디렉터리도 가능
+        schema: "migrations" # 테이블이나 기본적인 스키마 구성 -> 디렉터리도 가능
+        gen:
+          go:
+            package: "sqlc" # 만들 패키지 이름
+            out: "internal/sqlc" # 만들 디렉터리 이름
+            emit_json_tags: true # JSON 태그 추가
+            emit_interface: true # Repository 인터페이스 자동 생성
+            emit_empty_slices: true # nil 대신 빈 슬라이스 반환
+    ```
+3. Queries에 사용할 쿼리 작성(internal/queries/user.go)
+    ```sql
+    -- name: CreateUser :exec
+    INSERT INTO users (name, age) VALUES (?, ?);
+    
+    -- name: GetAllUsers :many
+    SELECT id, name, age FROM users;
+    
+    -- name: GetUserByName :one
+    SELECT id, name, age FROM users WHERE name = ? LIMIT 1;
+    
+    -- name: UpdateUserAge :execresult
+    UPDATE users SET age = ? WHERE name = ?;
+    
+    -- name: DeleteUserByName :execresult
+    DELETE FROM users WHERE name = ?;
+    
+    ```
+   - `-- name: 함수명 :리턴타입`: sqlc가 인식하는 특수 주석
+   - `:exec`: 결과 없음 (INSERT 등)
+   - `:execresult`: sql.Result 반환 (RowsAffected 체크 가능)
+   - `:one`: 단일 row 반환
+   - `:many`: 여러 row 반환 (슬라이스)
+4. schema에 해당하는 migration 디렉터리 연결(이미 되어있음)
+    ```sql
+    CREATE TABLE ...
+    ```
+5. 코드 생성
+    ```shell
+    sqlc generate
+    ```
+    `internal/sqlc`디렉터리에 코드 생성됨
+6. 기존 repo에 통합!
+
+    repo는 쿼리를 돌려서 필요한 값을 service에 넘김.
+
+    따라서, sqlc패키지에서 생성된 *sqlc.Queries를 필드로 쓰면 됨
 
 
 ## 추가적으로 고려되는것(하다보니)
