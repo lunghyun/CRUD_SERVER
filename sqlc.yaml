@@ -1,0 +1,10 @@
+version: 2
+sql:
+  - engine: "mysql"
+    queries: "internal/queries"
+    schema: "migrations"
+    gen:
+      go:
+        package: "sqlc"
+        out: "internal/sqlc"
+        emit_empty_slices: true
