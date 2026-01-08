@@ -20,6 +20,12 @@ func newUserRepository(db *sql.DB) *UserRepository {
 	}
 }
 
+func (r *UserRepository) WithTx(tx *sql.Tx) *UserRepository {
+	return &UserRepository{
+		queries: r.queries.WithTx(tx),
+	}
+}
+
 func (r *UserRepository) Create(ctx context.Context, newUser *types.User) error {
 	if err := r.queries.CreateUser(ctx, sqlc.CreateUserParams{
 		Name: newUser.Name,
