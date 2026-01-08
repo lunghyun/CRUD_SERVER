@@ -10,7 +10,7 @@ import (
 	"github.com/lunghyun/CRUD_SERVER/internal/types/cerrors"
 )
 
-type UserSqlRepository struct {
+type UserRepository struct {
 	queries *sqlc.Queries
 }
 
