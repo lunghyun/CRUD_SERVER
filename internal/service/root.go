@@ -18,11 +18,16 @@ var (
 )
 
 type Service struct {
+	repository  *repository.Repository
 	UserService *UserService
 }
 
 func NewService(rep *repository.Repository) *Service {
 	serviceInit.Do(func() {
+		serviceInstance = &Service{
+			repository: rep,
+		}
+
 		serviceInstance.UserService = newUserService(rep)
 	})
 
