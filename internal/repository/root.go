@@ -14,13 +14,13 @@ var (
 )
 
 type Repository struct {
-	User *UserSqlRepository
+	User *UserRepository
 }
 
 func NewRepository(db *sql.DB) *Repository {
 	repositoryInit.Do(func() {
 		repositoryInstance = &Repository{
-			User: newUserSqlRepository(db), // 구현체는 여기 주입
+			User: newUserRepository(db), // 구현체는 여기 주입
 		}
 	})
 

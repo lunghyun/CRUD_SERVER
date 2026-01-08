@@ -14,13 +14,13 @@ type UserSqlRepository struct {
 	queries *sqlc.Queries
 }
 
-func newUserSqlRepository(db *sql.DB) *UserSqlRepository {
-	return &UserSqlRepository{
+func newUserRepository(db *sql.DB) *UserRepository {
+	return &UserRepository{
 		queries: sqlc.New(db),
 	}
 }
 
-func (r *UserSqlRepository) Create(ctx context.Context, newUser *types.User) error {
+func (r *UserRepository) Create(ctx context.Context, newUser *types.User) error {
 	if err := r.queries.CreateUser(ctx, sqlc.CreateUserParams{
 		Name: newUser.Name,
 		Age:  int32(newUser.Age),
@@ -31,7 +31,7 @@ func (r *UserSqlRepository) Create(ctx context.Context, newUser *types.User) err
 	return nil
 }
 
-func (r *UserSqlRepository) Get(ctx context.Context) ([]*types.User, error) {
+func (r *UserRepository) Get(ctx context.Context) ([]*types.User, error) {
 	users, err := r.queries.GetAllUsers(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("user 조회 실패: %w", err)
@@ -48,7 +48,7 @@ func (r *UserSqlRepository) Get(ctx context.Context) ([]*types.User, error) {
 	return result, nil
 }
 
-func (r *UserSqlRepository) Update(ctx context.Context, updatedUser *types.User) error {
+func (r *UserRepository) Update(ctx context.Context, updatedUser *types.User) error {
 	result, err := r.queries.UpdateUserAge(ctx, sqlc.UpdateUserAgeParams{
 		Name: updatedUser.Name,
 		Age:  int32(updatedUser.Age),
@@ -71,7 +71,7 @@ func (r *UserSqlRepository) Update(ctx context.Context, updatedUser *types.User)
 	return nil
 }
 
-func (r *UserSqlRepository) Delete(ctx context.Context, userName string) error {
+func (r *UserRepository) Delete(ctx context.Context, userName string) error {
 	result, err := r.queries.DeleteUserByName(ctx, userName)
 	if err != nil {
 		return fmt.Errorf("user 삭제 실패: %w", err)
