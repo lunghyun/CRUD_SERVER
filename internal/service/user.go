@@ -8,28 +8,28 @@ import (
 )
 
 type UserService struct {
-	userRepository repository.UserRepository
+	repo *repository.UserSqlRepository
 }
 
-func newUserService(userRepository repository.UserRepository) *UserService {
+func newUserService(userRepository *repository.UserSqlRepository) *UserService {
 	return &UserService{
-		userRepository: userRepository,
+		repo: userRepository,
 	}
 }
 
 func (s *UserService) Create(ctx context.Context, newUser *types.User) error {
-	return s.userRepository.Create(ctx, newUser)
-	//tx, err := s.userRepository.
+	return s.repo.Create(ctx, newUser)
+	//tx, err := s.repo.
 }
 
 func (s *UserService) Get(ctx context.Context) ([]*types.User, error) {
-	return s.userRepository.Get(ctx)
+	return s.repo.Get(ctx)
 }
 
 func (s *UserService) Update(ctx context.Context, updatedUser *types.User) error {
-	return s.userRepository.Update(ctx, updatedUser)
+	return s.repo.Update(ctx, updatedUser)
 }
 
 func (s *UserService) Delete(ctx context.Context, user *types.User) error {
-	return s.userRepository.Delete(ctx, user.Name)
+	return s.repo.Delete(ctx, user.Name)
 }

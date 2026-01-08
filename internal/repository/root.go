@@ -14,7 +14,7 @@ var (
 )
 
 type Repository struct {
-	User UserRepository
+	User *UserSqlRepository
 }
 
 func NewRepository(db *sql.DB) *Repository {
