@@ -5,7 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/lunghyun/CRUD_SERVER/internal/sqlc"
+	"github.com/lunghyun/CRUD_SERVER/db/sqlc"
 	"github.com/lunghyun/CRUD_SERVER/internal/types"
 	"github.com/lunghyun/CRUD_SERVER/internal/types/cerrors"
 )
